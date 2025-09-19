@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SweetCard from "../components/SweetCard";
+import axios from "axios";
 
 export default function Dashboard() {
+  const [sweets, setSweets] = useState([]);
   const [search, setSearch] = useState("");
-  const sweets = [
-    { id: 1, name: "Rasgulla", description: "Soft & spongy", price: 50, quantity: 10 },
-    { id: 2, name: "Gulab Jamun", description: "Sweet & juicy", price: 40, quantity: 0 },
-    { id: 3, name: "Kaju Katli", description: "Rich cashew sweet", price: 100, quantity: 5 }
-  ];
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/sweets/")
+      .then(res => setSweets(res.data))
+      .catch(err => console.error(err));
+  }, []);
 
   const filtered = sweets.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
 
